@@ -13,6 +13,7 @@
     "@types/node": "18.13.0",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
+    "daisyui": "^2.50.0",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "mongodb": "^5.0.0",
@@ -23,6 +24,7 @@
     "zod": "^3.20.2"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.13",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
