@@ -1,6 +1,6 @@
 - [] Setup Server
   - [x] Install Dependencies
-  - [] Install / Setup Linter
+  - [x] Setup Linter
 - [] Model DB
   - What data will we store?
 - [] Setup Mongoose Model(s)
