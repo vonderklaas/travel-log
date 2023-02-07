@@ -5,7 +5,7 @@ export default async function Home() {
   const logs = await TravelLogs.find().toArray();
   return (
     <main>
-      <h1>Travel Log</h1>
+      <h1 className='text-3xl font-bold underline'>TravelLog</h1>
       {Object.keys(logs).length === 0 ? (
         <p>No logs</p>
       ) : (
