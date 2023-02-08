@@ -51,7 +51,7 @@ export const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
           <Popup offset={[0, -40]}>
             <p className='text-lg font-bold'>{log.title}</p>
             <div className='flex justify-center items-center'>
-              <img alt={log.title} src={log.image} className='w-96' />
+              <img alt={log.title} src={log.image} className='w-100' />
             </div>
             <p>{log.description}</p>
             <p className='text-sm'>

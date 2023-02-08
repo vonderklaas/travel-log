@@ -4,6 +4,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TravelLog, TravelLogKeyType } from '@/models/TravelLog/TravelLog';
 
+import { useRouter } from 'next/navigation';
+
 const travelLogInputs: Record<
   TravelLogKeyType,
   {
@@ -42,6 +44,8 @@ const nowString = `${now.getFullYear()}-${padNum(now.getMonth() + 1)}-${padNum(
 )}`;
 
 export const TravelLogForm = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -69,6 +73,8 @@ export const TravelLogForm = () => {
     });
     const json = await response.json();
     console.log(json);
+    // ???
+    router.push('/');
   };
 
   return (
