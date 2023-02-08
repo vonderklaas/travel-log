@@ -3,11 +3,11 @@
   - [x] Linter
 - [x] Model DB
 - [x] Setup MongoDB Model(s)
-- [] POST /logs
+- [x] POST /logs
   - Create a new log entry
-- [] GET / logs
+- [x] GET / logs
   - List all log entries
-- [] Create Form to add a new entry
+- [x] Create Form to add a new entry
 - [] Setup Map SDK on client
 - [] List all log entries on map
 - [] DEPLOY!
