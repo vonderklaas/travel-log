@@ -8,6 +8,11 @@
 - [x] GET / logs
   - List all log entries
 - [x] Create Form to add a new entry
-- [] Setup Map SDK on client
-- [] List all log entries on map
+- [x] Setup Map SDK on client
+- [x] List all log entries on map
+- [] Add pages flow
+- [] After user submit location, go to map page
+- [] Think of React Query
+- [] Split code into components
+- [] Fix namings
 - [] DEPLOY!

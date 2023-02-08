@@ -81,7 +81,9 @@ export const TravelLogForm = () => {
         return (
           <div key={name} className='form-control w-full'>
             <label className='label'>
-              <span className='label-text'>{name}</span>
+              <span className='label-text capitalize'>
+                {value.label || name}
+              </span>
             </label>
             {value.type === 'textarea' ? (
               <textarea
