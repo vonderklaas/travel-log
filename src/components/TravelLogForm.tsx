@@ -5,76 +5,94 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TravelLog, TravelLogKeyType } from '@/models/TravelLog/TravelLog';
 
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Alert } from './Alert';
 
 const travelLogInputs: Record<
   TravelLogKeyType,
   {
     label?: string;
-    type: 'text' | 'url' | 'textarea' | 'date' | 'number';
+    type: 'text' | 'url' | 'textarea' | 'number';
   }
 > = {
   title: {
     type: 'text',
+    label: 'What was it?',
   },
   description: {
     type: 'textarea',
+    label: 'Your trip in few words',
   },
   image: {
     type: 'url',
-  },
-  rating: {
-    type: 'number',
+    label: 'Add Image URL',
   },
   latitude: {
     type: 'number',
+    label: 'Copy & Paste Latitude',
   },
   longitude: {
     type: 'number',
-  },
-  visitDate: {
-    label: 'Visit Date',
-    type: 'date',
+    label: 'Copy & Paste Longitude',
   },
 };
 
-const now = new Date();
-const padNum = (input: number) => input.toString().padStart(2, '0');
-const nowString = `${now.getFullYear()}-${padNum(now.getMonth() + 1)}-${padNum(
-  now.getDate()
-)}`;
+interface TravelLogFormProps {
+  onComplete: () => void;
+  onCancel: () => void;
+}
 
-export const TravelLogForm = () => {
+export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
+  const [formError, setFormError] = useState('');
+
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<TravelLog>({
     resolver: zodResolver(TravelLog),
     defaultValues: {
       title: '',
       description: '',
-      rating: 5,
       latitude: 90,
       longitude: 180,
-      // @ts-ignore
-      visitDate: nowString,
     },
   });
 
   const onSubmit: SubmitHandler<TravelLog> = async (data) => {
-    const response = await fetch('/api/logs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    const json = await response.json();
-    console.log(json);
-    // ???
-    router.push('/');
+    const afterAddCleanup = () => {
+      // Refresh, reset form and close Sidebar()
+      router.push('/');
+      // Reset form
+      reset();
+      // hide sidebar
+      onComplete();
+    };
+
+    try {
+      setFormError('');
+      const response = await fetch('/api/logs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        afterAddCleanup();
+      } else {
+        const json = await response.json();
+        // COMES FROM FROM BACKEND
+        throw new Error(json.message);
+      }
+    } catch (e) {
+      const error = e as Error;
+      setFormError(error.message);
+    }
   };
 
   return (
@@ -82,6 +100,7 @@ export const TravelLogForm = () => {
       className='mx-auto max-w-md flex gap-4 flex-col'
       onSubmit={handleSubmit(onSubmit)}
     >
+      {formError ? <Alert message={formError} /> : null}
       {Object.entries(travelLogInputs).map(([name, value]) => {
         const property = name as TravelLogKeyType;
         return (
@@ -113,7 +132,12 @@ export const TravelLogForm = () => {
         );
       })}
 
-      <button className='btn btn-success'>Create</button>
+      <div className='flex justify-between gap-4'>
+        <button className='flex-grow btn btn-warning'>Add marker</button>
+        <button className='flex-grow btn btn-error' onClick={onCancel}>
+          Discard
+        </button>
+      </div>
     </form>
   );
 };

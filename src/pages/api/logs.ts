@@ -5,6 +5,7 @@ import {
   TravelLogs,
   TravelLogWithId,
 } from '@/models/TravelLog/TravelLogs';
+import { ObjectId } from 'mongodb';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,6 +25,16 @@ export default async function handler(
       case 'GET':
         const logs = await TravelLogs.find().toArray();
         return res.status(200).json(logs);
+      case 'DELETE':
+        try {
+          // console.log(req.body);
+          await TravelLogs.deleteOne({ _id: new ObjectId(req.body) });
+          // console.log(deletedLog);
+          return res.status(200).json({ message: 'Log was deleted!' });
+        } catch (e) {
+          const error = e as Error;
+          return res.status(500).json({ message: error.message });
+        }
       default:
         return res
           .status(405)

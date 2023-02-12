@@ -7,7 +7,7 @@ import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useEffect } from 'react';
-
+import { useRouter } from 'next/navigation';
 const DefaultIcon = L.icon({
   iconUrl: icon.src,
   shadowUrl: iconShadow.src,
@@ -24,18 +24,48 @@ interface TravelLOgMapProps {
 const InitMap = ({ logs }: TravelLOgMapProps) => {
   const map = useMap();
 
+  const initMap = () => {
+    if (logs.length) {
+      map.invalidateSize();
+      // Center map in the middle of all log points
+      const bounds = new L.LatLngBounds(
+        logs.map((log) => [log.latitude, log.longitude])
+      );
+      map.fitBounds(bounds);
+    } else {
+      // If no logs, map is centered in the middle of map
+      map.setZoom(3);
+      map.setView([34.854, -41.898]);
+    }
+  };
+
   useEffect(() => {
-    map.invalidateSize();
-    const bounds = new L.LatLngBounds(
-      logs.map((log) => [log.latitude, log.longitude])
-    );
-    map.fitBounds(bounds);
+    setTimeout(initMap, 200);
   }, [map, logs]);
 
   return null;
 };
 
 export const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
+  const router = useRouter();
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch('/api/logs', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(id),
+      });
+      const deleted = await response.json();
+      console.log(deleted);
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <MapContainer className='w-full h-full'>
       <TileLayer
@@ -54,10 +84,12 @@ export const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
               <img alt={log.title} src={log.image} className='w-100' />
             </div>
             <p>{log.description}</p>
-            <p className='text-sm'>
-              Visited at{' '}
-              {new Date(log.visitDate.toString()).toLocaleDateString()}
-            </p>
+            <button
+              className='btn btn-warning'
+              onClick={() => handleDelete(log._id.toString())}
+            >
+              Remove Log
+            </button>
           </Popup>
         </Marker>
       ))}
