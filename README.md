@@ -1,6 +1,6 @@
 ### Full-stack Travel Log
 
-Full-stack Next.js application with currently experimental /app directory, Leaflet map and MongoDB database. Good example of how Server and Client components work with each other.
+A full-stack Next.js application with currently experimental /app directory, Leaflet map and MongoDB database. Good example of how Server and Client components work with each other.
 
 ### How to run?
 
