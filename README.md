@@ -1,22 +1,22 @@
-### Full Stack Travel Log
+### Full-stack Travel Log
 
----
+Full-stack Next.js application with currently experimental /app directory, Leaflet map and MongoDB database. Good example of how Server and Client components work with each other.
 
 ### How to run?
 
-1 - CLONE PROJECT
+Clone project
 
 ```
 git clone <PROJECT URL>
 ```
 
-2 - INSTALL PACKAGES
+Install packages and dependencies
 
 ```
 npm i
 ```
 
-3 - RUN APPLICATION
+Run application
 
 ```
 npm run dev
