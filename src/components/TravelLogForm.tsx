@@ -5,8 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TravelLog, TravelLogKeyType } from '@/models/TravelLog/TravelLog';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert } from './Alert';
+
+import { useLocationStore } from '@/store/store';
 
 const travelLogInputs: Record<
   TravelLogKeyType,
@@ -37,19 +39,24 @@ const travelLogInputs: Record<
   },
 };
 
-interface TravelLogFormProps {
+type TravelLogFormProps = {
+  // latLng: L.LatLng | null;
   onComplete: () => void;
   onCancel: () => void;
-}
+};
 
 export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
   const [formError, setFormError] = useState('');
 
   const router = useRouter();
 
+  const location = useLocationStore((state: any) => state.location);
+  const setLocation = useLocationStore((state: any) => state.setLocation);
+
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<TravelLog>({
@@ -57,10 +64,18 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
     defaultValues: {
       title: '',
       description: '',
-      latitude: 90,
-      longitude: 180,
+      latitude: location?.lat,
+      longitude: location?.lng,
     },
   });
+
+  useEffect(() => {
+    if (!location) {
+      return;
+    }
+    setValue('latitude', location?.lat);
+    setValue('longitude', location?.lat);
+  }, [location]);
 
   const onSubmit: SubmitHandler<TravelLog> = async (data) => {
     const afterAddCleanup = () => {
@@ -134,7 +149,14 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
 
       <div className='flex justify-between gap-4'>
         <button className='flex-grow btn btn-warning'>Add marker</button>
-        <button className='flex-grow btn btn-error' onClick={onCancel}>
+        <button
+          className='flex-grow btn btn-error'
+          onClick={() => {
+            onCancel();
+            reset();
+            setLocation(null);
+          }}
+        >
           Discard
         </button>
       </div>

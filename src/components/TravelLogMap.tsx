@@ -8,6 +8,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
 const DefaultIcon = L.icon({
   iconUrl: icon.src,
   shadowUrl: iconShadow.src,
@@ -17,11 +18,16 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-interface TravelLOgMapProps {
+type TravelLOgMapProps = {
   logs: TravelLogWithId[];
-}
+};
 
-const InitMap = ({ logs }: TravelLOgMapProps) => {
+type InitMapProps = {
+  logs: TravelLogWithId[];
+  onMapClick: (event: L.LeafletMouseEvent) => void;
+};
+
+const InitMap = ({ logs, onMapClick }: InitMapProps) => {
   const map = useMap();
 
   const initMap = () => {
@@ -37,6 +43,7 @@ const InitMap = ({ logs }: TravelLOgMapProps) => {
       map.setZoom(3);
       map.setView([34.854, -41.898]);
     }
+    map.on('click', onMapClick);
   };
 
   useEffect(() => {
@@ -46,7 +53,11 @@ const InitMap = ({ logs }: TravelLOgMapProps) => {
   return null;
 };
 
-export const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
+import { useLocationStore, useSidebarStateStore } from '@/store/store';
+
+const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
+  // const [newTravelLogLocation, setNewTravelLogLocation] =
+  //   useState<L.LatLng | null>(null);
   const router = useRouter();
 
   const handleDelete = async (id: string) => {
@@ -66,13 +77,39 @@ export const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
     }
   };
 
+  const isOpened = useSidebarStateStore((state) => state.isOpened);
+  const setIsOpened = useSidebarStateStore((state) => state.setIsOpened);
+
+  const location = useLocationStore((state: any) => state.location);
+  const setLocation = useLocationStore((state: any) => state.setLocation);
+
   return (
     <MapContainer className='w-full h-full'>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
-      {<InitMap logs={logs} />}
+      <InitMap
+        logs={logs}
+        onMapClick={(e) => {
+          // setNewTravelLogLocation(e.latlng);
+          setLocation(e.latlng);
+          if (!isOpened) {
+            setIsOpened(true);
+          }
+        }}
+      />
+      {location && (
+        <Marker
+          eventHandlers={{
+            dragend(e) {
+              setLocation(e.target.getLatLng());
+            },
+          }}
+          draggable={true}
+          position={location}
+        />
+      )}
       {logs.map((log) => (
         <Marker
           key={log._id.toString()}
@@ -96,3 +133,5 @@ export const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
     </MapContainer>
   );
 };
+
+export default TravelLogMap;
