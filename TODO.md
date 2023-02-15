@@ -12,6 +12,6 @@
 - [x] List all log entries on map
 - [x] Add pages flow
 - [x] Added Zustand
-- [] Split code into components
-- [] Fix namings
-- [] DEPLOY!
+- [x] Split code into components
+- [x] Fix namings
+- [x] DEPLOY!
