@@ -27,10 +27,10 @@ export default async function handler(
         return res.status(200).json(logs);
       case 'DELETE':
         try {
-          // console.log(req.body);
           await TravelLogs.deleteOne({ _id: new ObjectId(req.body) });
-          // console.log(deletedLog);
-          return res.status(200).json({ message: 'Log was deleted!' });
+          return res
+            .status(200)
+            .json({ message: 'Experience has been deleted!' });
         } catch (e) {
           const error = e as Error;
           return res.status(500).json({ message: error.message });
@@ -38,7 +38,7 @@ export default async function handler(
       default:
         return res
           .status(405)
-          .json({ message: 'HTTP method is not supported!' });
+          .json({ message: 'Sorry, HTTP method is not supported!' });
     }
   } catch (e) {
     const error = e as Error;

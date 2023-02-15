@@ -1,4 +1,4 @@
-export default function LoadingSpinner() {
+export const Spinner = () => {
   return (
     <div className='w-full h-full flex justify-center items-center'>
       <div role='status'>
@@ -18,8 +18,7 @@ export default function LoadingSpinner() {
             fill='currentFill'
           />
         </svg>
-        <span className='sr-only'>Loading...</span>
       </div>
     </div>
   );
-}
+};

@@ -1,5 +1,3 @@
-// This code can be used both on client and server
-
 import { z } from 'zod';
 
 const errors = {

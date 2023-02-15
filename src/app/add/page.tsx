@@ -1,4 +1,4 @@
-import { TravelLogForm } from '@/components/TravelLogForm';
+import { TravelLogForm } from '@/components/AddForm';
 
 export default async function Add() {
   return (

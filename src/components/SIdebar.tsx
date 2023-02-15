@@ -2,15 +2,16 @@
 
 import { TravelLogWithId } from '@/models/TravelLog/TravelLogs';
 import { useState } from 'react';
-import { TravelLogForm } from '../components/TravelLogForm';
+import { AddForm } from './AddForm';
 
-import { useLocationStore, useSidebarStateStore } from '@/store/store';
+import { useSidebarStateStore } from '@/store/store';
+import LogsHistory from './LogsHistory';
 
 type TravelLogMapProps = {
   logs: TravelLogWithId[];
 };
 
-export const TravelLogSidebar = ({ logs }: TravelLogMapProps) => {
+export const Sidebar = ({ logs }: TravelLogMapProps) => {
   const [logsHistory, setLogsHistory] = useState(false);
 
   const isOpened = useSidebarStateStore((state) => state.isOpened);
@@ -20,12 +21,12 @@ export const TravelLogSidebar = ({ logs }: TravelLogMapProps) => {
 
   return (
     <>
-      <div className='fixed top-4 right-36 z-[999]'>
+      <div className='fixed top-4 right-48 z-[999]'>
         <button
           className='btn bnt-primary'
           onClick={() => setLogsHistory(!isOpened)}
         >
-          My logs
+          MY EXPERIENCES
         </button>
       </div>
       <div className='fixed top-4 right-4 z-[999]'>
@@ -33,37 +34,17 @@ export const TravelLogSidebar = ({ logs }: TravelLogMapProps) => {
           className='btn bnt-primary'
           onClick={() => setIsOpened(!isOpened)}
         >
-          Add marker
+          ADD EXPERIENCE
         </button>
       </div>
       {isOpened ? (
         <div className='fixed h-full top-0 right-0 p-4 w-96 bg-base-100 text-base-content z-[999] overflow-y-auto'>
-          <TravelLogForm onCancel={closeSidebar} onComplete={closeSidebar} />
+          <AddForm onCancel={closeSidebar} onComplete={closeSidebar} />
         </div>
       ) : null}
       {logsHistory ? (
         <div className='fixed h-full top-0 right-0 p-4 w-96 bg-base-100 text-base-content z-[999] overflow-y-auto'>
-          <h2>My Logs</h2>
-          <ul>
-            {logs.map((log) => {
-              return (
-                <li key={log._id.toString()}>
-                  <p>{log.title}</p>
-                  <p>{log.description}</p>
-                  <img src={log.image} alt={log.title} />
-                  <br />
-                </li>
-              );
-            })}
-          </ul>
-          <div className='flex justify-between gap-4'>
-            <button
-              className='flex-grow btn btn-error'
-              onClick={() => setLogsHistory(false)}
-            >
-              Discard
-            </button>
-          </div>
+          <LogsHistory logs={logs} setLogsHistory={setLogsHistory} />
         </div>
       ) : null}
     </>

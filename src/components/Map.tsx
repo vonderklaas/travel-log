@@ -4,19 +4,26 @@ import { TravelLogWithId } from '@/models/TravelLog/TravelLogs';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const DefaultIcon = L.icon({
-  iconUrl: icon.src,
-  shadowUrl: iconShadow.src,
-  iconSize: [25, 41],
-  iconAnchor: [25 / 2, 41],
-});
+const createIcon = (fill = '#56BC58', iconSize = 32) => {
+  return L.divIcon({
+    className: 'bg-transparent',
+    html: `
+      <svg viewBox="0 0 24 24" width="${iconSize}" stroke='black' stroke-width="2" height="${iconSize}" fill="${fill}" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle stroke='black' stroke-width="2" cx="12" cy="10" r="3"></circle>
+      </svg>
+    `,
+    iconSize: [iconSize, iconSize],
+    iconAnchor: [12, 24],
+  });
+};
 
-L.Marker.prototype.options.icon = DefaultIcon;
+L.Marker.prototype.options.icon = createIcon();
+
+const currentMarkerIcon = createIcon('#F2BB05');
 
 type TravelLOgMapProps = {
   logs: TravelLogWithId[];
@@ -55,9 +62,7 @@ const InitMap = ({ logs, onMapClick }: InitMapProps) => {
 
 import { useLocationStore, useSidebarStateStore } from '@/store/store';
 
-const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
-  // const [newTravelLogLocation, setNewTravelLogLocation] =
-  //   useState<L.LatLng | null>(null);
+const Map = ({ logs }: TravelLOgMapProps) => {
   const router = useRouter();
 
   const handleDelete = async (id: string) => {
@@ -79,7 +84,6 @@ const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
 
   const isOpened = useSidebarStateStore((state) => state.isOpened);
   const setIsOpened = useSidebarStateStore((state) => state.setIsOpened);
-
   const location = useLocationStore((state: any) => state.location);
   const setLocation = useLocationStore((state: any) => state.setLocation);
 
@@ -92,7 +96,6 @@ const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
       <InitMap
         logs={logs}
         onMapClick={(e) => {
-          // setNewTravelLogLocation(e.latlng);
           setLocation(e.latlng);
           if (!isOpened) {
             setIsOpened(true);
@@ -101,6 +104,7 @@ const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
       />
       {location && (
         <Marker
+          icon={currentMarkerIcon}
           eventHandlers={{
             dragend(e) {
               setLocation(e.target.getLatLng());
@@ -115,17 +119,18 @@ const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
           key={log._id.toString()}
           position={[log.latitude, log.longitude]}
         >
-          <Popup offset={[0, -40]}>
+          <Popup offset={[0, -25]}>
             <p className='text-lg font-bold'>{log.title}</p>
             <div className='flex justify-center items-center'>
               <img alt={log.title} src={log.image} className='w-100' />
             </div>
             <p>{log.description}</p>
+            <p>Rating: {log.rating} out of 10</p>
             <button
-              className='btn btn-warning'
+              className='btn btn-error'
               onClick={() => handleDelete(log._id.toString())}
             >
-              Remove Log
+              Delete Experience
             </button>
           </Popup>
         </Marker>
@@ -134,4 +139,4 @@ const TravelLogMap = ({ logs }: TravelLOgMapProps) => {
   );
 };
 
-export default TravelLogMap;
+export default Map;

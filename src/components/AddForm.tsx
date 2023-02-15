@@ -37,33 +37,20 @@ const travelLogInputs: Record<
     type: 'url',
     label: 'Add Image URL',
   },
-  // latitude: {
-  //   type: 'number',
-  //   label: 'Copy & Paste Latitude',
-  // },
-  // longitude: {
-  //   type: 'number',
-  //   label: 'Copy & Paste Longitude',
-  // },
 };
 
-type TravelLogFormProps = {
-  // latLng: L.LatLng | null;
+type AddFormProps = {
   onComplete: () => void;
   onCancel: () => void;
 };
 
-export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
+export const AddForm = ({ onComplete, onCancel }: AddFormProps) => {
   const [formError, setFormError] = useState('');
 
   const router = useRouter();
 
   const location = useLocationStore((state: any) => state.location);
   const setLocation = useLocationStore((state: any) => state.setLocation);
-
-  // const { lat, lng } = location || null;
-
-  // console.log(lat.toFixed(5), lng.toFixed(5));
 
   const {
     register,
@@ -87,19 +74,10 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
       return;
     }
     setValue('latitude', location?.lat);
-    setValue('longitude', location?.lat);
+    setValue('longitude', location?.lng);
   }, [location]);
 
   const onSubmit: SubmitHandler<TravelLog> = async (data) => {
-    const afterAddCleanup = () => {
-      // Refresh, reset form and close Sidebar()
-      router.push('/');
-      // Reset form
-      reset();
-      // hide sidebar
-      onComplete();
-    };
-
     try {
       setFormError('');
       const response = await fetch('/api/logs', {
@@ -109,12 +87,12 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
         },
         body: JSON.stringify(data),
       });
-
       if (response.ok) {
-        afterAddCleanup();
+        router.push('/');
+        reset();
+        onComplete();
       } else {
         const json = await response.json();
-        // COMES FROM FROM BACKEND
         throw new Error(json.message);
       }
     } catch (e) {
@@ -182,7 +160,7 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
         )}
       </div>
       <div className='flex justify-between gap-4'>
-        <button className='flex-grow btn btn-warning'>Add marker</button>
+        <button className='flex-grow btn btn-warning'>Add Experience</button>
         <button
           className='flex-grow btn btn-error'
           onClick={() => {
@@ -191,7 +169,7 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
             setLocation(null);
           }}
         >
-          Discard
+          Cancel
         </button>
       </div>
     </form>
