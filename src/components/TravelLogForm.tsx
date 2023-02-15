@@ -2,7 +2,11 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TravelLog, TravelLogKeyType } from '@/models/TravelLog/TravelLog';
+import {
+  TravelLog,
+  TravelLogKeyType,
+  TravelLogKeyTypeWithoutLocation,
+} from '@/models/TravelLog/TravelLog';
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -11,7 +15,7 @@ import { Alert } from './Alert';
 import { useLocationStore } from '@/store/store';
 
 const travelLogInputs: Record<
-  TravelLogKeyType,
+  TravelLogKeyTypeWithoutLocation,
   {
     label?: string;
     type: 'text' | 'url' | 'textarea' | 'number';
@@ -25,18 +29,22 @@ const travelLogInputs: Record<
     type: 'textarea',
     label: 'Your trip in few words',
   },
+  rating: {
+    type: 'number',
+    label: 'Rate your experience?',
+  },
   image: {
     type: 'url',
     label: 'Add Image URL',
   },
-  latitude: {
-    type: 'number',
-    label: 'Copy & Paste Latitude',
-  },
-  longitude: {
-    type: 'number',
-    label: 'Copy & Paste Longitude',
-  },
+  // latitude: {
+  //   type: 'number',
+  //   label: 'Copy & Paste Latitude',
+  // },
+  // longitude: {
+  //   type: 'number',
+  //   label: 'Copy & Paste Longitude',
+  // },
 };
 
 type TravelLogFormProps = {
@@ -53,6 +61,10 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
   const location = useLocationStore((state: any) => state.location);
   const setLocation = useLocationStore((state: any) => state.setLocation);
 
+  // const { lat, lng } = location || null;
+
+  // console.log(lat.toFixed(5), lng.toFixed(5));
+
   const {
     register,
     handleSubmit,
@@ -64,6 +76,7 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
     defaultValues: {
       title: '',
       description: '',
+      rating: 5,
       latitude: location?.lat,
       longitude: location?.lng,
     },
@@ -146,7 +159,28 @@ export const TravelLogForm = ({ onComplete, onCancel }: TravelLogFormProps) => {
           </div>
         );
       })}
-
+      <div className='form-control'>
+        <label className='label'>
+          <span className='label-text capitalize'>Latitude, Longitude</span>
+        </label>
+        {location ? (
+          <input
+            value={[location.lat.toFixed(5), location.lng.toFixed(5)].join(
+              ', '
+            )}
+            className='input input-bordered input-disabled input-accent w-full'
+            disabled
+            type='text'
+          />
+        ) : (
+          <input
+            className='input input-bordered input-disabled input-accent w-full'
+            value='Click on the map!'
+            disabled
+            type='text'
+          />
+        )}
+      </div>
       <div className='flex justify-between gap-4'>
         <button className='flex-grow btn btn-warning'>Add marker</button>
         <button

@@ -10,9 +10,8 @@
 - [x] Create Form to add a new entry
 - [x] Setup Map SDK on client
 - [x] List all log entries on map
-- [] Add pages flow
-- [] After user submit location, go to map page
-- [] Think of React Query
+- [x] Add pages flow
+- [x] Added Zustand
 - [] Split code into components
 - [] Fix namings
 - [] DEPLOY!

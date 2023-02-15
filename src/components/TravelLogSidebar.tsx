@@ -4,7 +4,7 @@ import { TravelLogWithId } from '@/models/TravelLog/TravelLogs';
 import { useState } from 'react';
 import { TravelLogForm } from '../components/TravelLogForm';
 
-import { useSidebarStateStore } from '@/store/store';
+import { useLocationStore, useSidebarStateStore } from '@/store/store';
 
 type TravelLogMapProps = {
   logs: TravelLogWithId[];
