@@ -1,6 +1,6 @@
 ### Full-stack Travel Log
 
-A full-stack Next.js application with currently experimental /app directory, Leaflet map and MongoDB database. Good example of how Server and Client components work with each other.
+This full-stack Next.js is project built with experimental /app directory. It includes searching and managing your travel locations. There is also a fully interactive map made with Leaflet.
 
 ### UI
 ![UI](https://github.com/garbalau-github/next-travel-log/blob/main/UI.png?raw=true)
