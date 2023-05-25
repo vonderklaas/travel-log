@@ -1,47 +1,47 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import {
-  TravelLog,
-  TravelLogs,
-  TravelLogWithId,
+    TravelLog,
+    TravelLogs,
+    TravelLogWithId,
 } from '@/models/TravelLog/TravelLogs';
 import { ObjectId } from 'mongodb';
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<
-    TravelLogWithId | TravelLogWithId[] | { message: string }
-  >
+    req: NextApiRequest,
+    res: NextApiResponse<
+        TravelLogWithId | TravelLogWithId[] | { message: string }
+    >
 ) {
-  try {
-    switch (req.method) {
-      case 'POST':
-        const validatedLog = await TravelLog.parseAsync(req.body);
-        const insertResult = await TravelLogs.insertOne(validatedLog);
-        return res.status(200).json({
-          ...validatedLog,
-          _id: insertResult.insertedId,
-        });
-      case 'GET':
-        const logs = await TravelLogs.find().toArray();
-        return res.status(200).json(logs);
-      case 'DELETE':
-        try {
-          await TravelLogs.deleteOne({ _id: new ObjectId(req.body) });
-          return res
-            .status(200)
-            .json({ message: 'Experience has been deleted!' });
-        } catch (e) {
-          const error = e as Error;
-          return res.status(500).json({ message: error.message });
+    try {
+        switch (req.method) {
+            case 'POST':
+                const validatedLog = await TravelLog.parseAsync(req.body);
+                const insertResult = await TravelLogs.insertOne(validatedLog);
+                return res.status(200).json({
+                    ...validatedLog,
+                    _id: insertResult.insertedId,
+                });
+            case 'GET':
+                const logs = await TravelLogs.find().toArray();
+                return res.status(200).json(logs);
+            case 'DELETE':
+                try {
+                    await TravelLogs.deleteOne({ _id: new ObjectId(req.body) });
+                    return res
+                        .status(200)
+                        .json({ message: 'Experience has been deleted!' });
+                } catch (e) {
+                    const error = e as Error;
+                    return res.status(500).json({ message: error.message });
+                }
+            default:
+                return res
+                    .status(405)
+                    .json({ message: 'Sorry, HTTP method is not supported!' });
         }
-      default:
-        return res
-          .status(405)
-          .json({ message: 'Sorry, HTTP method is not supported!' });
+    } catch (e) {
+        const error = e as Error;
+        return res.status(500).json({ message: error.message });
     }
-  } catch (e) {
-    const error = e as Error;
-    return res.status(500).json({ message: error.message });
-  }
 }

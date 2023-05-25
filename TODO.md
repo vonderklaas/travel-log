@@ -1,17 +1,17 @@
-- [x] Setup Project
-  - [x] Install Dependencies
-  - [x] Linter
-- [x] Model DB
-- [x] Setup MongoDB Model(s)
-- [x] POST /logs
-  - Create a new log entry
-- [x] GET / logs
-  - List all log entries
-- [x] Create Form to add a new entry
-- [x] Setup Map SDK on client
-- [x] List all log entries on map
-- [x] Add pages flow
-- [x] Added Zustand
-- [x] Split code into components
-- [x] Fix namings
-- [x] DEPLOY!
+-   [x] Setup Project
+    -   [x] Install Dependencies
+    -   [x] Linter
+-   [x] Model DB
+-   [x] Setup MongoDB Model(s)
+-   [x] POST /logs
+    -   Create a new log entry
+-   [x] GET / logs
+    -   List all log entries
+-   [x] Create Form to add a new entry
+-   [x] Setup Map SDK on client
+-   [x] List all log entries on map
+-   [x] Add pages flow
+-   [x] Added Zustand
+-   [x] Split code into components
+-   [x] Fix namings
+-   [x] DEPLOY!
