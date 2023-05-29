@@ -8,3 +8,7 @@ body {
     height: 100vh;
     overflow: hidden;
 }
+
+.main {
+    box-sizing: border-box;
+}

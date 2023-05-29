@@ -1,5 +1,4 @@
 import { TravelLogWithId } from '@/models/TravelLog/TravelLogs';
-import React from 'react';
 
 type LogsHistoryProps = {
     logs: TravelLogWithId[];
@@ -12,9 +11,9 @@ export const LogsHistory = ({ logs, setLogsHistory }: LogsHistoryProps) => {
             <ul>
                 {logs.map((log) => {
                     return (
-                        <li key={log._id.toString()}>
+                        <li className='p-2' key={log._id.toString()}>
                             <h3 className='text-xl'>{log.title}</h3>
-                            <p>{log.description}</p>
+                            <p className='mb-2'>{log.description}</p>
                             <img src={log.image} alt={log.title} />
                             <br />
                         </li>

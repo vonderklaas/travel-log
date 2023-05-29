@@ -63,6 +63,11 @@ const InitMap = ({ logs, onMapClick }: InitMapProps) => {
 import { useLocationStore, useSidebarStateStore } from '@/store/store';
 
 const Map = ({ logs }: TravelLOgMapProps) => {
+    const isOpened = useSidebarStateStore((state) => state.isOpened);
+    const location = useLocationStore((state: any) => state.location);
+    const setLocation = useLocationStore((state: any) => state.setLocation);
+    const setIsOpened = useSidebarStateStore((state) => state.setIsOpened);
+
     const router = useRouter();
 
     const handleDelete = async (id: string) => {
@@ -81,11 +86,6 @@ const Map = ({ logs }: TravelLOgMapProps) => {
             console.log(error);
         }
     };
-
-    const isOpened = useSidebarStateStore((state) => state.isOpened);
-    const setIsOpened = useSidebarStateStore((state) => state.setIsOpened);
-    const location = useLocationStore((state: any) => state.location);
-    const setLocation = useLocationStore((state: any) => state.setLocation);
 
     return (
         <MapContainer className='w-full h-full'>

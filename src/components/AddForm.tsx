@@ -127,6 +127,8 @@ export const AddForm = ({ onComplete, onCancel }: AddFormProps) => {
                             <input
                                 type={value.type}
                                 step='any'
+                                min={value.type === 'number' ? 1 : undefined}
+                                max={value.type === 'number' ? 10 : undefined}
                                 className={`input input-bordered input-accent w-full ${
                                     errors[property] ? 'input-error' : ''
                                 }`}

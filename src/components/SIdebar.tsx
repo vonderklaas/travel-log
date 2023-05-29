@@ -26,7 +26,7 @@ export const Sidebar = ({ logs }: TravelLogMapProps) => {
                     className='btn bnt-primary'
                     onClick={() => setLogsHistory(!isOpened)}
                 >
-                    MY EXPERIENCES
+                    History of Experiences
                 </button>
             </div>
             <div className='fixed top-4 right-4 z-[999]'>
@@ -34,7 +34,7 @@ export const Sidebar = ({ logs }: TravelLogMapProps) => {
                     className='btn bnt-primary'
                     onClick={() => setIsOpened(!isOpened)}
                 >
-                    ADD EXPERIENCE
+                    + ADD NEW
                 </button>
             </div>
             {isOpened ? (
